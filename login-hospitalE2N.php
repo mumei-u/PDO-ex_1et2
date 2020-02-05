@@ -8,7 +8,7 @@ define('DB', 'hospitalE2N');
 function connectDb() {
   $dsn = 'mysql:dbname=' . DB . ';host=' . HOST .';charset=utf8';
   try {
-    $db = new PDO($dsn, USER, PASSWD);
+    $db = new PDO($dsn, USER, PASSWD, ['PDO::ATTR_ERRMODE'=> 'PDO::ERRMODE_EXCEPTION']);
     return $db;
   } catch (Exception $ex) {
     die('La connexion à la bd a échoué !');

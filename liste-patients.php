@@ -4,18 +4,21 @@ require 'login-hospitalE2N.php';
 // fonction permettant de continuer si la connexion est réussi
 $db = connectDb();
 // variable pour afficher les données souhaité d'une table
-$sql = 'SELECT `lastname`, `firstname`, `birthdate`, `phone`, `mail` FROM `patients` LIMIT 50';
+$sql = 'SELECT `id`, `lastname`, `firstname`, `birthdate`, `phone`, `mail` FROM `patients` LIMIT 50';
 // Envoie de la requête vers la base de données
 $usersQueryStat = $db->query($sql);
-// Collection des données dans un tableau associatif (FETCH_ASSOC)
-$usersList = $usersQueryStat->fetchAll(PDO::FETCH_ASSOC);
+$usersList = [];
+if ($usersQueryStat instanceOf PDOStatement) {
+  // Collection des données dans un tableau associatif (FETCH_ASSOC)
+  $usersList = $usersQueryStat->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
   <title>Liste de patients | PDO</title>
 </head>
 <body>
@@ -35,11 +38,13 @@ $usersList = $usersQueryStat->fetchAll(PDO::FETCH_ASSOC);
     </tr>
   </thead>
   <tbody>
-    <?php foreach ($usersList AS $key => $user):
+    <?php
+    if (count($usersList) > 0) {
+    foreach ($usersList AS $key => $user):
       ?>
       <tr>
         <td><?= $key + 1 ?></td>
-        <td><?= $user['lastname'] ?></td>
+        <td><a href="profil-patient.php?idPatient=<?= $user['id'] ?>"><?= $user['lastname'] ?></a></td>
         <td><?= $user['firstname']?></td>
         <td><?= $user['birthdate']?></td>
         <td><?= $user['phone']?></td>
@@ -47,7 +52,9 @@ $usersList = $usersQueryStat->fetchAll(PDO::FETCH_ASSOC);
         <td><a href="http://pdopartie2/exercice2/profil-patient.php">page profil</a></td>
       </tr>
       <?php
-    endforeach;?>
+    endforeach;
+  }
+    ?>
   </tbody>
 </table>
 <a class="btn btn-warning" href="ajout-patient.php">Créer un patient</a>

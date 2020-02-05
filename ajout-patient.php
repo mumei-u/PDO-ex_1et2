@@ -17,11 +17,12 @@ $sth->bindValue(':birthdate', $birthdate, PDO::PARAM_STR);
 $sth->bindValue(':phone', $phone, PDO::PARAM_STR);
 $sth->bindValue(':mail', $mail, PDO::PARAM_STR);
 // éxecution de la requête
-if ($sth->execute()) {
-  // si le formulaire est rempli sans faute, il nous enverra dans la page 'liste-patients.php'
-  header('Location: liste-patients.php');
-  exit();
-}
+$execute = $sth->execute();
+var_dump($execute);
+// if ($sth->execute()) {
+//   header('Location: liste-patients.php');
+//   exit();
+// }
 // $sth->execute([
 //   ':lastname' => $lastname,
 //   ':firstname' => $firstname,
